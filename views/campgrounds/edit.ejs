@@ -3,7 +3,12 @@
 <div class="row">
   <h1 class="text-center">Edit Campground</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post">
+    <form
+      novalidate
+      action="/campgrounds/<%= campground._id %>?_method=PUT"
+      method="post"
+      class="validated-form"
+    >
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
         <input
@@ -12,7 +17,9 @@
           id="title"
           class="form-control"
           value="<%= campground.title %>"
+          required
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
@@ -22,14 +29,16 @@
           id="location"
           class="form-control"
           value="<%= campground.location %>"
+          required
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="price">Campground Price</label>
         <div class="input-group">
           <span class="input-group-text" id="price-label">$</span>
           <input
-            type="number"
+            type="text"
             class="form-control"
             placeholder="0.00"
             aria-label="price-label"
@@ -37,7 +46,9 @@
             id="price"
             name="campground[price]"
             value="<%= campground.price %>"
+            required
           />
+          <div class="valid-feedback">Looks good!</div>
         </div>
       </div>
       <div class="mb-3">
@@ -48,7 +59,9 @@
           id="image"
           class="form-control"
           value="<%= campground.image %>"
+          required
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="description">Description</label>
@@ -57,9 +70,11 @@
           name="campground[description]"
           id="description"
           class="form-control"
+          required
         >
 <%= campground.description %></textarea
         >
+        <div class="valid-feedback">Looks good!</div>
       </div>
 
       <div class="mb-3">
