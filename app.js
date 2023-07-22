@@ -6,8 +6,13 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const path = require("path");
 const ExpressError = require("./utils/ExpressError");
-const campgrounds = require("./routes/campgrounds");
-const reviews = require("./routes/reviews");
+const campgroundRoutes = require("./routes/campgrounds");
+const reviewRoutes = require("./routes/reviews");
+const userRoutes = require("./routes/users");
+const passport = require("passport");
+const localStrategy = require("passport-local"); // way to login
+const User = require("./models/user");
+
 mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -36,12 +41,19 @@ const sessionConfig = {
     maxAge: 1000 * 60 * 60 * 24 * 7, // how long the session lasts
   },
 };
-app.use(session(sessionConfig));
 
+app.use(session(sessionConfig));
 app.use(flash());
+app.use(passport.initialize()); // init passport
+app.use(passport.session()); // for persistent login sessions, must be below app.session
+passport.use(new localStrategy(User.authenticate())); // use local strategy to authenticate our user
+passport.serializeUser(User.serializeUser()); // how to store the user in the session
+passport.deserializeUser(User.deserializeUser()); // how to remove the user
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.currentUser = req.user;
   next();
 });
 
@@ -49,8 +61,9 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+app.use("/", userRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
