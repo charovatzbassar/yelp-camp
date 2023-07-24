@@ -99,11 +99,9 @@
     </form>
     <% } %> <% for (let review of campground.reviews) { %>
     <div class="card mb-3">
+      <h5 class="card-title pt-3 ps-3"><%= review.author.username %></h5>
       <div class="card-body">
         <p class="starability-result" data-rating="<%= review.rating %>"></p>
-        <p class="card-subtitle text-muted mb-2">
-          By: <%= review.author.username %>
-        </p>
         <p class="card-text"><%= review.body %></p>
         <% if (currentUser && review.author.equals(currentUser._id)) { %>
         <form
