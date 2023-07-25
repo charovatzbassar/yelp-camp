@@ -35,6 +35,8 @@
     </div>
   </div>
   <div class="col-6">
+    <div id="map" style="width: 400px; height: 300px"></div>
+
     <% if (currentUser) { %>
     <h2>Leave a Review!</h2>
     <form
@@ -49,7 +51,6 @@
             type="radio"
             id="first-rate1"
             name="review[rating]"
-            checked
             value="1"
           />
           <label for="first-rate1" title="Terrible">1 star</label>
@@ -65,6 +66,7 @@
             id="first-rate3"
             name="review[rating]"
             value="3"
+            checked
           />
           <label for="first-rate3" title="Average">3 stars</label>
           <input
@@ -116,3 +118,8 @@
     <% } %>
   </div>
 </div>
+<script>
+  const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
+  const campground = <%- JSON.stringify(campground) %>;
+</script>
+<script src="/js/showPageMap.js"></script>
