@@ -18,8 +18,10 @@ const localStrategy = require("passport-local"); // way to login
 const User = require("./models/user");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const MongoStore = require("connect-mongo")(session);
 
-mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp", {
+const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp";
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -84,7 +86,19 @@ app.use(
   })
 );
 
+const store = new MongoStore({
+  // store sessions in db, not in memory, removed after 14 days
+  url: dbUrl,
+  secret: process.env.SESSION_SECRET,
+  touchAfter: 24 * 3600, // update session once every 24 hours
+});
+
+store.on("error", function (e) {
+  console.log(e);
+});
+
 const sessionConfig = {
+  store,
   name: "session",
   secret: process.env.SESSION_SECRET,
   resave: false,
