@@ -16,6 +16,7 @@ const userRoutes = require("./routes/users");
 const passport = require("passport");
 const localStrategy = require("passport-local"); // way to login
 const User = require("./models/user");
+const mongoSanitize = require("express-mongo-sanitize");
 
 mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp", {
   useNewUrlParser: true,
@@ -34,9 +35,10 @@ const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(mongoSanitize()); // prohibits using $ and . in query strings
 
 const sessionConfig = {
-  secret: "thisshouldbeabettersecret",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
