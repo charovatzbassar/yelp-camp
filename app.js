@@ -20,8 +20,8 @@ const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const MongoStore = require("connect-mongo")(session);
 
-const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp";
-mongoose.connect(dbUrl, {
+//const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp";
+mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
