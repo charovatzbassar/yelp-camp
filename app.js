@@ -88,7 +88,7 @@ app.use(
 
 const store = new MongoStore({
   // store sessions in db, not in memory, removed after 14 days
-  url: dbUrl,
+  url: process.env.DB_URL,
   secret: process.env.SESSION_SECRET,
   touchAfter: 24 * 3600, // update session once every 24 hours
 });
